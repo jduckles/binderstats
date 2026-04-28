@@ -435,8 +435,14 @@ function showError(msg) {
 
 const ARCHIVE_BASE = 'https://archive.analytics.mybinder.org';
 
+// Set to false when hosted directly under mybinder.org (same-origin, no CORS issue).
+// Set to true for any other host (GitHub Pages, local dev, etc.) where a proxy is needed.
+const USE_CORS_PROXY = true;
+const CORS_PROXY = 'https://corsproxy.io/?url=';
+
 function eventUrl(date) {
-  return `${ARCHIVE_BASE}/events-${date}.jsonl`;
+  const url = `${ARCHIVE_BASE}/events-${date}.jsonl`;
+  return USE_CORS_PROXY ? CORS_PROXY + encodeURIComponent(url) : url;
 }
 
 // ── Streaming JSONL fetch with download-progress estimation ───────────────────
